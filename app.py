@@ -7,6 +7,7 @@ books = {
     2: {"id": 2, "title": "DevOps Fundamentals", "borrowed": False},
 }
 
+
 @app.get("/")
 def home():
     return jsonify({
@@ -15,13 +16,16 @@ def home():
         "status": "running"
     })
 
+
 @app.get("/health")
 def health():
     return jsonify({"status": "healthy"})
 
+
 @app.get("/books")
 def list_books():
     return jsonify(list(books.values()))
+
 
 @app.post("/books")
 def add_book():
@@ -35,6 +39,7 @@ def add_book():
     }
     return jsonify(books[book_id]), 201
 
+
 @app.post("/books/<int:book_id>/borrow")
 def borrow_book(book_id):
     book = books.get(book_id)
@@ -45,6 +50,7 @@ def borrow_book(book_id):
     book["borrowed"] = True
     return jsonify(book)
 
+
 @app.post("/books/<int:book_id>/return")
 def return_book(book_id):
     book = books.get(book_id)
@@ -52,8 +58,10 @@ def return_book(book_id):
         return jsonify({"error": "book not found"}), 404
     if not book["borrowed"]:
         return jsonify({"error": "book is not borrowed"}), 409
+
     book["borrowed"] = False
     return jsonify(book)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
